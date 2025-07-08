@@ -308,17 +308,179 @@ type WorkerPool struct {
 - **Quality over quantity**: Better to go deep on fewer topics than surface-level on many
 - **Leave buffer time**: Save last 5 minutes for clarification and candidate questions
 
-### Alternative Questions (If Needed)
-Choose based on candidate background and time constraints:
+## Alternative Questions (If Needed)
 
-#### Alternative Go Questions
-- **Memory Debugging**: "Debug a memory leak using pprof step-by-step"
-- **Build Optimization**: "Structure a large Go monorepo with multiple services"
-- **Testing Strategy**: "Design integration testing for a microservices architecture"
+### Alternative Advanced Go Questions
+**If candidate struggles with expert-level concepts, choose from:**
 
-#### Alternative Architecture Questions  
-- **Event Sourcing**: "When would you choose event sourcing over traditional CRUD?"
-- **API Versioning**: "Design a backward-compatible API versioning strategy"
-- **Observability**: "Design monitoring and alerting for distributed systems"
+#### Alternative 1: Go Memory Management & GC (6-8 minutes)
+**"What is the Go garbage collector, and how does it work? How would you optimize a Go application for better memory performance?"**
 
-This streamlined 90-minute format maximizes the value of questions from `hard.md` while maintaining comprehensive senior-level assessment across all critical areas. 
+**Expected Answer Points** *(from general-questions.md)*:
+- **GC Type**: Concurrent, tri-color, mark-and-sweep garbage collector
+- **Mark Phase**: Walks object graph from roots, marks reachable objects concurrently
+- **Sweep Phase**: Identifies unmarked objects (garbage) and reclaims memory concurrently
+- **Low-latency Design**: Minimizes "stop-the-world" pauses for server applications
+- **Optimization Strategies**: Object pooling, allocation reduction, memory profiling
+
+**Follow-up**: "How would you use object pools to reduce GC pressure in a high-throughput service?"
+
+#### Alternative 2: Go Modules & Dependency Management (5-6 minutes)
+**"Describe the Go module system and advanced dependency management practices for large-scale applications."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Go Modules**: Collection of Go packages versioned together as single unit
+- **go.mod**: Defines module path, required dependencies, and versions
+- **go.sum**: Cryptographically verifies content of required modules
+- **Dependency Management**: `go get`, `go mod tidy`, `go mod vendor` for reproducible builds
+- **Advanced Practices**: Version constraints, replace directives, workspace mode
+
+**Follow-up**: "How would you handle breaking changes in dependencies across a microservices architecture?"
+
+#### Alternative 3: Go Interfaces & Type System (5-6 minutes)
+**"Explain Go's interface system and how you'd design interfaces for a large-scale application."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Implicit Implementation**: No explicit `implements` keyword
+- **Interface Segregation**: Small, focused interfaces over large general ones
+- **Composition**: Embedding interfaces to build larger contracts
+- **Type Assertions**: `.(type)` and type switches for runtime type inspection
+- **Best Practices**: Accept interfaces, return concrete types
+
+**Follow-up**: "How would you design interfaces to support multiple implementations for testing and production?"
+
+### Alternative Database & Performance Questions
+**If candidate struggles with advanced database concepts, choose from:**
+
+#### Alternative 1: Database Scaling Strategies (8-10 minutes)
+**"Explain different database scaling approaches and when you'd use each."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Vertical Scaling**: Increasing single server resources (CPU, RAM, storage)
+- **Read Replicas**: Distributing read traffic across multiple database instances
+- **Sharding**: Horizontal partitioning of data across multiple databases
+- **CQRS**: Command Query Responsibility Segregation for read/write optimization
+- **Connection Pooling**: Managing database connections efficiently
+
+**Follow-up**: "How would you handle cross-shard transactions in a sharded database?"
+
+#### Alternative 2: SQL Optimization Fundamentals (6-8 minutes)
+**"How do you optimize SQL queries for performance? Walk me through your process."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **EXPLAIN Plans**: Understanding query execution plans and identifying bottlenecks
+- **Indexing Strategy**: Creating appropriate indexes for WHERE, JOIN, ORDER BY clauses
+- **Query Optimization**: Avoiding SELECT *, optimizing JOINs, proper WHERE clauses
+- **Performance Monitoring**: Slow query logs, query performance metrics
+- **Database Tuning**: Connection pools, memory allocation, timeouts
+
+**Follow-up**: "How would you identify and fix N+1 query problems in an ORM?"
+
+### Alternative Leadership & Decision Making Questions
+**If candidate struggles with advanced leadership scenarios, choose from:**
+
+#### Alternative 1: Technical Decision Framework (6-8 minutes)
+**"How do you approach making technical decisions in a team environment? Walk me through your decision-making process."**
+
+**Expected Answer Points**:
+- **Information Gathering**: Research, proof of concepts, team input, stakeholder requirements
+- **Evaluation Criteria**: Performance, maintainability, team expertise, timeline, cost
+- **Risk Assessment**: Technical debt, learning curve, future scalability
+- **Documentation**: Decision records, rationale, alternatives considered
+- **Communication**: Transparent communication with team and stakeholders
+
+**Follow-up**: "How do you handle situations where team members disagree with your technical decisions?"
+
+#### Alternative 2: Code Quality & Team Standards (6-8 minutes)
+**"How do you establish and maintain code quality standards across a development team?"**
+
+**Expected Answer Points**:
+- **Code Review Process**: Structured review guidelines, educational feedback
+- **Standards Documentation**: Coding standards, best practices, style guides
+- **Tooling**: Linters, formatters, static analysis, CI/CD integration
+- **Knowledge Sharing**: Team learning sessions, pair programming, mentoring
+- **Continuous Improvement**: Regular retrospectives, updating standards
+
+**Follow-up**: "How do you balance code quality with delivery pressure?"
+
+### Alternative System Design Questions
+**If candidate struggles with complex system design, choose from:**
+
+#### Alternative 1: Microservices Architecture Basics (15-20 minutes)
+**"Design a basic e-commerce system using microservices. Focus on service boundaries and communication patterns."**
+
+**Expected Design Components**:
+- **Service Breakdown**: User service, product service, order service, payment service
+- **Communication**: REST APIs, message queues for async operations
+- **Data Management**: Service-owned databases, eventual consistency
+- **Cross-cutting Concerns**: API Gateway, authentication, logging
+- **Scalability**: Load balancing, caching, horizontal scaling
+
+**Guided Questions**:
+- "How would you handle user authentication across services?"
+- "What happens when the payment service is down during order processing?"
+- "How would you ensure data consistency across services?"
+
+#### Alternative 2: API Design & Integration (12-15 minutes)
+**"Design a RESTful API for a social media platform. Include authentication, rate limiting, and versioning."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Resource Design**: Users, posts, comments, follows - proper URI structure
+- **HTTP Methods**: GET, POST, PUT, PATCH, DELETE with appropriate usage
+- **Authentication**: JWT tokens, OAuth 2.0 integration
+- **Rate Limiting**: Per-user limits, API quotas, throttling strategies
+- **Versioning**: URI versioning, header versioning, media type versioning
+- **Error Handling**: Consistent error responses, appropriate HTTP status codes
+
+**Follow-up**: "How would you handle API deprecation and migration?"
+
+#### Alternative 3: Caching Strategy Design (10-12 minutes)
+**"Design a comprehensive caching strategy for a high-traffic web application."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Cache Levels**: Browser cache, CDN, application cache, database cache
+- **Cache Patterns**: Cache-aside, write-through, write-behind
+- **Invalidation**: TTL, event-driven invalidation, cache tags
+- **Distributed Caching**: Redis clusters, cache coherency, partitioning
+- **Performance**: Cache hit ratios, monitoring, optimization
+
+**Follow-up**: "How would you prevent cache stampede problems?"
+
+### Alternative Complex Problem Solving
+**If candidate struggles with system design challenge, choose from:**
+
+#### Alternative 1: Performance Optimization Case Study (15-20 minutes)
+**"You have a Go web service with 500ms average response time that needs to be under 100ms. Walk me through your optimization approach."**
+
+**Expected Analysis Points**:
+- **Profiling**: CPU profiling, memory profiling, goroutine profiling
+- **Database Optimization**: Query optimization, connection pooling, caching
+- **Application Optimization**: Algorithm improvements, concurrency patterns
+- **Infrastructure**: Load balancing, horizontal scaling, CDN
+- **Monitoring**: Before/after metrics, continuous monitoring
+
+**Follow-up**: "How would you optimize this for 10x more traffic?"
+
+#### Alternative 2: Distributed System Reliability (15-20 minutes)
+**"Design reliability patterns for a distributed system that needs 99.9% uptime."**
+
+**Expected Design Components**:
+- **Redundancy**: Multiple instances, geographic distribution
+- **Health Checks**: Service health monitoring, automatic failover
+- **Circuit Breakers**: Preventing cascade failures, graceful degradation
+- **Retry Logic**: Exponential backoff, idempotent operations
+- **Monitoring**: Real-time alerting, SLA tracking
+
+**Follow-up**: "How would you handle a total data center outage?"
+
+### Usage Guidelines for Alternative Questions
+- **Assessment Level**: Use alternatives when primary questions prove too advanced
+- **Maintain Standards**: Alternatives should still evaluate senior-level thinking
+- **Document Usage**: Record which alternatives were used for evaluation consistency
+- **Time Flexibility**: Adjust timing based on alternative question complexity
+- **Progressive Assessment**: Use multiple alternatives to gauge true capability level
+- **Focus Areas**: Prioritize alternatives that align with role requirements
+
+---
+
+## Scoring Guidelines (100 Points Total) 

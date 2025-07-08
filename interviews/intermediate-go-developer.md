@@ -373,6 +373,210 @@ func (wp *WorkerPool) Shutdown() {
 
 ---
 
+## Alternative Questions (If Needed)
+
+### Alternative Go Concepts Questions
+**If candidate struggles with advanced concepts, choose from:**
+
+#### Alternative 1: Basic Go Interfaces (5 minutes)
+**"Explain interfaces in Go and their importance. How do they differ from interfaces in other languages?"**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Implicit Implementation**: No explicit `implements` keyword; any type providing all methods satisfies the interface
+- **Polymorphism**: Allows writing functions that operate on any type satisfying an interface
+- **Decoupling**: Enables loose coupling by depending on abstractions rather than concrete implementations
+- **Testing**: Makes it easy to mock dependencies during testing
+- **Duck Typing**: "If it walks like a duck and quacks like a duck, it's a duck"
+
+**Follow-up**: "Can you give an example of how you'd use interfaces for dependency injection in Go?"
+
+#### Alternative 2: Go Error Handling (5 minutes)
+**"How does Go handle error management? What are some best practices you follow?"**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Multiple Return Values**: Conventionally, last return value is an `error` interface
+- **Explicit Checking**: Always check for errors immediately (`if err != nil`)
+- **Sentinel Errors**: Use exported `var` errors for known conditions (`errors.Is`)
+- **Error Wrapping**: Use `fmt.Errorf("%w", err)` to add context while preserving original error
+- **Custom Error Types**: Define structured error types for more information
+- **Return Up Stack**: Don't print and exit unless in `main` function
+
+**Follow-up**: "How would you handle errors in a chain of function calls?"
+
+#### Alternative 3: Go Context Package (4 minutes)
+**"What is the `context` package in Go, and why is it crucial for web development?"**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Purpose**: Carries deadlines, cancellation signals, and request-scoped values across API boundaries
+- **Timeouts/Deadlines**: Ensures operations don't block indefinitely
+- **Cancellation**: Allows graceful shutdown when clients disconnect
+- **Request-Scoped Values**: Passing request-specific data (user ID, trace IDs) without explicit parameters
+- **Microservices**: Vital for logging and tracing in distributed systems
+
+**Follow-up**: "How would you use context for request timeouts in an HTTP handler?"
+
+### Alternative SQL Questions
+**If candidate struggles with advanced SQL, choose from:**
+
+#### Alternative 1: Basic SQL Joins (4 minutes)
+**"Explain the different types of SQL joins and when you would use them."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **INNER JOIN**: Returns rows with matching values in both tables
+- **LEFT JOIN**: Returns all rows from left table, matching rows from right (NULLs for no match)
+- **RIGHT JOIN**: Returns all rows from right table, matching rows from left
+- **FULL JOIN**: Returns all rows when there's a match in either table
+
+**Follow-up**: "Give me a practical example of when you'd use a LEFT JOIN vs INNER JOIN."
+
+#### Alternative 2: Database Normalization (5 minutes)
+**"What is database normalization and why is it important?"**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Purpose**: Organizing tables to minimize data redundancy and improve integrity
+- **1NF**: Each column contains atomic values, no repeating groups
+- **2NF**: No partial dependencies on primary key
+- **3NF**: No transitive dependencies between non-key attributes
+- **Benefits**: Reduces anomalies, improves data integrity
+
+**Follow-up**: "What are the trade-offs between normalization and denormalization?"
+
+#### Alternative 3: ACID Properties (4 minutes)
+**"Explain the ACID properties of database transactions."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Atomicity**: All operations succeed or none do (indivisible unit)
+- **Consistency**: Transaction brings database from one valid state to another
+- **Isolation**: Concurrent transactions execute as if sequential
+- **Durability**: Committed changes survive system failures
+
+**Follow-up**: "Why are ACID properties important for financial applications?"
+
+### Alternative System Design Questions
+**If candidate struggles with caching, choose from:**
+
+#### Alternative 1: Horizontal vs Vertical Scaling (4 minutes)
+**"What's the difference between horizontal and vertical scaling? When would you use each?"**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Vertical Scaling (Scale Up)**: Increasing resources of single server (CPU, RAM)
+  - *Pros*: Simpler, no distributed system complexity
+  - *Cons*: Hardware limits, single point of failure, expensive at scale
+- **Horizontal Scaling (Scale Out)**: Adding more servers/instances
+  - *Pros*: Nearly limitless scalability, fault tolerance, cost-effective
+  - *Cons*: Distributed system complexity, data consistency challenges
+
+**Follow-up**: "How would you decide when to scale horizontally vs vertically?"
+
+#### Alternative 2: Load Balancing Basics (4 minutes)
+**"Explain load balancing and describe a few common algorithms."**
+
+**Expected Answer Points** *(from general-questions.md)*:
+- **Purpose**: Distribute traffic across multiple servers to prevent bottlenecks
+- **Round Robin**: Sequential distribution to each server
+- **Weighted Round Robin**: More requests to stronger servers
+- **Least Connection**: Directs to server with fewest active connections
+- **IP Hash**: Same client IP goes to same server (session affinity)
+
+**Follow-up**: "What happens if one of your backend servers fails?"
+
+### Alternative Coding Challenges
+**If candidate struggles with worker pool, choose from:**
+
+#### Alternative 1: Simple Channel Communication (10 minutes)
+**"Implement a simple producer-consumer pattern using goroutines and channels. One goroutine produces numbers 1-10, another consumes and prints them."**
+
+**Expected Solution Structure**:
+```go
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+func producer(ch chan<- int, wg *sync.WaitGroup) {
+    defer wg.Done()
+    defer close(ch)
+    for i := 1; i <= 10; i++ {
+        ch <- i
+    }
+}
+
+func consumer(ch <-chan int, wg *sync.WaitGroup) {
+    defer wg.Done()
+    for num := range ch {
+        fmt.Printf("Consumed: %d\n", num)
+    }
+}
+
+func main() {
+    ch := make(chan int)
+    var wg sync.WaitGroup
+    
+    wg.Add(2)
+    go producer(ch, &wg)
+    go consumer(ch, &wg)
+    
+    wg.Wait()
+}
+```
+
+#### Alternative 2: Basic Concurrency with Mutex (10 minutes)
+**"Create a thread-safe counter that can be incremented by multiple goroutines simultaneously."**
+
+**Expected Solution Structure**:
+```go
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+type SafeCounter struct {
+    mu    sync.Mutex
+    value int
+}
+
+func (c *SafeCounter) Increment() {
+    c.mu.Lock()
+    defer c.mu.Unlock()
+    c.value++
+}
+
+func (c *SafeCounter) Value() int {
+    c.mu.Lock()
+    defer c.mu.Unlock()
+    return c.value
+}
+
+func main() {
+    counter := &SafeCounter{}
+    var wg sync.WaitGroup
+    
+    for i := 0; i < 100; i++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            counter.Increment()
+        }()
+    }
+    
+    wg.Wait()
+    fmt.Printf("Final count: %d\n", counter.Value())
+}
+```
+
+### Usage Guidelines for Alternative Questions
+- **Use when**: Primary question proves too challenging for the candidate's current level
+- **Maintain rigor**: Alternative questions should still assess core competencies
+- **Document choice**: Note which alternatives were used in evaluation
+- **Time management**: Ensure alternatives fit within allocated time slots
+- **Progressive difficulty**: Can use multiple alternatives to find candidate's appropriate level
+
+---
+
 ## Scoring Guidelines
 
 ### Advanced Go Concepts (30 points)
