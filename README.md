@@ -92,6 +92,36 @@ This repository provides a complete toolkit for technical interview preparation 
 3. **Follow Structure**: Use provided timing and evaluation guidelines
 4. **Score Objectively**: Apply consistent scoring criteria across all candidates
 
+### 📊 Export to Excel
+
+Generate a comprehensive Excel file with all interview questions, answers, and coding challenges:
+
+```bash
+# Install dependencies
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# Generate Excel file
+python export_interviews_to_excel.py
+
+# Custom output filename
+python export_interviews_to_excel.py --output my_interview_questions.xlsx
+```
+
+**Excel Features:**
+- **Separate sheets** for Junior, Intermediate, and Senior levels
+- **Complete content** including coding challenges and SQL queries  
+- **Reference content** extracted from source files
+- **Font size 14** with text wrapping for readability
+- **Auto-sized columns** for optimal viewing
+
+**Generated Sheets:**
+- `Junior_Questions` - 8 questions (Go fundamentals, SQL basics, coding challenges)
+- `Intermediate_Questions` - 9 questions (Advanced Go, system design, worker pools)
+- `Senior_Questions` - 9 questions (Go mastery, architecture, leadership)
+- `Summary` - Overview of all interview levels
+
 ## 📖 Content Highlights
 
 ### Real-World Focus
